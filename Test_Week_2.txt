@@ -1,0 +1,19 @@
+Name of Challenge: Book Store
+Type: Console App
+Technologies: Java, MySQL, JDBC
+
+User Stores
+1. User need to register and login first
+2. Show Categories like (Technology, Literature, Fiction etc)
+3. User can select category to get the list of books belong to that category
+4. Display list of book (like title, author, ISBN number)
+5. User can choose a book to get more information (like title, author, price, category, description)
+6. There should to option (1-buy, 2-cancel)
+7. when select buy add book into cart and cancel go back to previous menu
+8. View cart and place the order
+
+Instruction
+1. form a team of two
+2. create github repo
+3. create two branch each with team member name
+4. once done push your code and share the link
