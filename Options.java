@@ -15,8 +15,10 @@ public class Options {
             int num1;
             try {
                 num1 = DaoFactory.getScanner().nextInt();
-            } catch (NumberFormatException e) {
+            } catch (InputMismatchException e) {
+                System.out.println("-----------------------------------------------------");
                 e.printStackTrace();
+                System.out.println("-----------------------------------------------------");
                 System.out.println("Cannot accept strings");
                 continue;
             }            
@@ -56,7 +58,7 @@ public class Options {
         System.out.print("Create a username: ");
         String username = DaoFactory.getScanner().next();
         if(UserAccountManager.findAccount(username)==null) {
-            System.out.println("username is available");
+            // System.out.println("username is available");
             System.out.print("Create a password: ");
             String password = DaoFactory.getScanner().next();
             userAcc.setUsername(username);
@@ -95,7 +97,9 @@ public class Options {
                 temp = DaoFactory.getScanner().nextInt();
             } catch (InputMismatchException e) {
                 System.out.print("InputMismatchException in Options.loggedIn: ");
+                System.out.println("-----------------------------------");
                 e.printStackTrace();
+                System.out.println("-----------------------------------------------------");
                 System.out.println("Not a number. Try again.");
                 loop = true;
                 continue;
@@ -113,7 +117,9 @@ public class Options {
                         );                            
                     } catch (IndexOutOfBoundsException e) {
                         System.out.print("IndexOutOfBoundsException: ");
+                        System.out.println("-----------------------------------");
                         e.printStackTrace();
+                        System.out.println("-----------------------------------------------------");
                         System.out.println("Invalid number. Try again.");
                         loop = true;
                     }

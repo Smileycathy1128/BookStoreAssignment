@@ -41,7 +41,7 @@ class UserAccount {
         return new Book();
     }
     
-    void removeBook(Book book) {
+    void removeFromCart(Book book) {
         if(cart.contains(book)) {
             cart.remove(book);
             System.out.println(
@@ -51,7 +51,7 @@ class UserAccount {
             return;
         }
         else {
-            System.err.println("Cannot removeBook. title: "+book.getTitle());
+            System.err.println("Cannot removeFromCart. title: "+book.getTitle());
         }
     }
 }
@@ -59,8 +59,9 @@ class UserAccount {
 public class UserAccountManager {
     protected static UserAccount findAccount(String username) {
         try {
-            DaoFactory.getPreparedStatement("select * from \"?\";").setString(1, Main.bookTableName);
-            ResultSet rs = DaoFactory.getPreparedStatement().executeQuery();
+            // DaoFactory.getPreparedStatement("select * from \"?\";").setString(1, Main.bookTableName);
+            // ResultSet rs = DaoFactory.getPreparedStatement().executeQuery();
+            ResultSet rs = DaoFactory.getResultSet("select * from "+Main.bookTableName+";");
             while(rs.next()) {
                 if(rs.getString(1).equals(username)) {
                     UserAccount acc = new UserAccount();
@@ -71,22 +72,25 @@ public class UserAccountManager {
             }
         } catch (SQLException e) {
             System.out.print("SQLException in UserAccountManager.findAccount: ");
+            System.out.println("-----------------------------------");
             e.printStackTrace();
+            System.out.println("-----------------------------------------------------");
         }
         return null;
     }
     protected static void addAccount(UserAccount acc) {
-            DaoFactory.getPreparedStatement("insert into \"?\" (\"username\",\"password\") values(\"?\",\"?\");");
+            DaoFactory.getPreparedStatement("insert into "+Main.userAccountTableName+" (\"username\",\"password\") values(\"?\",\"?\");");
         try {
-            DaoFactory.getPreparedStatement().setString(1, Main.userAccountTableName);
-            DaoFactory.getPreparedStatement().setString(2, acc.getUsername());
-            DaoFactory.getPreparedStatement().setString(3, acc.getPassword());
+            // DaoFactory.getPreparedStatement().setString(1, Main.userAccountTableName);
+            DaoFactory.getPreparedStatement().setString(1, acc.getUsername());
+            DaoFactory.getPreparedStatement().setString(2, acc.getPassword());
             DaoFactory.getPreparedStatement().executeQuery();
-            
             System.out.println("Account created");
         } catch (SQLException e) {
             System.out.print("SQLException in UserAccountManager.addAccount: ");
+            System.out.println("-----------------------------------");
             e.printStackTrace();
+            System.out.println("-----------------------------------------------------");
         }
     }
 }

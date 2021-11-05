@@ -30,7 +30,9 @@ public class Main {
             }
         } catch (SQLException e) {
             System.err.print("Error in Main.sql2ArrayList(): ");
+            System.out.println("-----------------------------------");
             e.printStackTrace();
+            System.out.println("-----------------------------------------------------");
         }
         if(bookArrayList.size()>0) {
             return bookArrayList;

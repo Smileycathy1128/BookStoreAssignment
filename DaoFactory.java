@@ -19,7 +19,9 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
                 connect = DriverManager.getConnection("jdbc:sqlite:BookStore.db");
             } catch (SQLException e2) {
                 System.out.print("[Unable to get Connection]: ");
+                System.out.println("-----------------------------------");
                 e2.printStackTrace();
+                System.out.println("-------------------------------------------------------");
             }
             
         }
@@ -34,7 +36,9 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
                 connect.close();
             } catch (SQLException e) {
                 System.out.print("[Cannot closeConnection]: ");
+                System.out.println("-----------------------------------");
                 e.printStackTrace();
+                System.out.println("-----------------------------------------------------");
             }
             connect = null;
         }
@@ -46,7 +50,9 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
                 statement = getConnection().createStatement();
             } catch (SQLException e) {
                 System.out.print("[Cannot createStatement]: ");
+                System.out.println("-----------------------------------");
                 e.printStackTrace();
+                System.out.println("-----------------------------------------------------");
             }
         }
         return statement;
@@ -61,7 +67,9 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
                 closeConnection();
             } catch (SQLException e) {
                 System.out.print("[Cannot closeStatement]: ");
+                System.out.println("-----------------------------------");
                 e.printStackTrace();
+                System.out.println("-----------------------------------------------------");
             }
             statement = null;
         }
@@ -80,7 +88,9 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
                 prep = getConnection().prepareStatement(str);
             } catch (SQLException e) {
                 System.out.print("[Cannot create PrepareStatement]: ");
+                System.out.println("-----------------------------------");
                 e.printStackTrace();
+                System.out.println("-----------------------------------------------------");
             }
         }
         else {
@@ -99,7 +109,9 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
                 closeConnection();
             } catch (SQLException e) {
                 System.out.print("[Cannot closePreparedStatement]: ");
+                System.out.println("-----------------------------------");
                 e.printStackTrace();
+                System.out.println("-----------------------------------------------------");
             }
             prep = null;
         }
@@ -112,7 +124,9 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
             } catch (SQLException e) {
                 System.out.println("This error again! :D");
                 System.out.print("[Cannot create ResultSet]: ");
+                System.out.println("-----------------------------------");
                 e.printStackTrace();
+                System.out.println("-----------------------------------------------------");
             }
         }
         return rs;
@@ -126,8 +140,10 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
                 rs.close();
                 closeStatement();
             } catch (SQLException e) {
+                System.out.println("-----------------------------------");
                 System.out.print("[Cannot closeResultSet]: ");
                 e.printStackTrace();
+                System.out.println("-----------------------------------------------------");
             }
             rs = null;
         }
