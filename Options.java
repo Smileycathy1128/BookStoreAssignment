@@ -4,6 +4,7 @@ public class Options {
     protected static boolean welcomeLoop = true;
     static void welcome() {
         do {
+            welcomeLoop = false;
             System.out.println(
                 "============\n"+
                 "[1] Log in\n"+
@@ -20,17 +21,19 @@ public class Options {
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
                 System.out.println("Cannot accept strings");
+                welcomeLoop = true;
                 continue;
             }            
             switch (num1) {
-                case 1: loggingIn();
+                case 1: loggingIn(); welcomeLoop = true;
                     break;
-                case 2: register(); loggingIn();
+                case 2: register(); loggingIn(); welcomeLoop = true;
                     break;
                 case 3: return;
                     // break;
                 default:
                     System.out.println("Invalid number");
+                    welcomeLoop = true;
                     break;
             }
 
@@ -44,7 +47,6 @@ public class Options {
         UserAccount temp = UserAccountManager.findAccount(username);
         if(temp==null) {
             System.out.println("Username not found");
-            System.out.println("username entered: "+username);
         }
         else {
             System.out.print("Password (not hidden): ");
@@ -58,20 +60,26 @@ public class Options {
     }
     
     static void register() {
-        UserAccount userAcc = new UserAccount();
-        System.out.print("Create a username: ");
-        String username = DaoFactory.getScanner().next();
-        if(UserAccountManager.findAccount(username)==null) {
-            // System.out.println("username is available");
-            System.out.print("Create a password: ");
-            String password = DaoFactory.getScanner().next();
-            userAcc.setUsername(username);
-            userAcc.setPassword(password);
-            UserAccountManager.addAccount(userAcc);
-        }
-        else {
-            System.out.println("Username is already taken");
-        }
+        boolean registerLoop;
+        do {
+            registerLoop = false;
+            UserAccount userAcc = new UserAccount();
+            System.out.print("Create a username: ");
+            String username = DaoFactory.getScanner().next();
+            if(UserAccountManager.findAccount(username)==null) {
+                // System.out.println("username is available");
+                System.out.print("Create a password: ");
+                String password = DaoFactory.getScanner().next();
+                userAcc.setUsername(username);
+                userAcc.setPassword(password);
+                UserAccountManager.addAccount(userAcc);
+            }
+            else {
+                System.out.println("Username is already taken");
+                registerLoop = true;
+            }
+        } while (registerLoop);
+
 
     }
     

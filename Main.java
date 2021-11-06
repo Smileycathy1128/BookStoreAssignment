@@ -24,13 +24,14 @@ public class Main {
         bookArrayList = new ArrayList<Book>();
         ResultSet resultSet = DaoFactory.getResultSet("select * from \""+Main.bookTableName+"\";");
         try {
-            while (resultSet.next()) {
+            while (resultSet.next()) { // TODO: this returns false
                 Book temp2 = new Book();
                 temp2.setISBN(resultSet.getString(1));
                 temp2.setTitle(resultSet.getString(2));
                 temp2.setAuthor(resultSet.getString(3));
                 temp2.categories = resultSet.getString(4).split(", ");
                 bookArrayList.add(temp2);
+                System.out.println(bookArrayList.size());
             }
         } catch (SQLException e) {
             System.err.print("Error in Main.sql2ArrayListBooks(): ");
@@ -42,9 +43,10 @@ public class Main {
             return bookArrayList;
         }
         else {
-            System.err.println("No books are in the ArrayList.");
+            System.err.println("[No books are in the ArrayList]");
             return null;
         }
+        
         
     }
     static ArrayList<UserAccount> sql2ArrayListAccounts() {
