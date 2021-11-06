@@ -63,6 +63,7 @@ public class UserAccountManager {
             // ResultSet rs = DaoFactory.getPreparedStatement().executeQuery();
             ResultSet rs = DaoFactory.getResultSet("select * from "+Main.bookTableName+";");
             while(rs.next()) {
+                System.out.println(rs.getString(1)); // TODO: testing
                 if(rs.getString(1).equals(username)) {
                     UserAccount acc = new UserAccount();
                     acc.setUsername(rs.getString(1));
@@ -79,18 +80,32 @@ public class UserAccountManager {
         return null;
     }
     protected static void addAccount(UserAccount acc) {
-            DaoFactory.getPreparedStatement("insert into "+Main.userAccountTableName+" (\"username\",\"password\") values(\"?\",\"?\");");
-        try {
-            // DaoFactory.getPreparedStatement().setString(1, Main.userAccountTableName);
-            DaoFactory.getPreparedStatement().setString(1, acc.getUsername());
-            DaoFactory.getPreparedStatement().setString(2, acc.getPassword());
-            DaoFactory.getPreparedStatement().executeQuery();
-            System.out.println("Account created");
-        } catch (SQLException e) {
-            System.out.print("SQLException in UserAccountManager.addAccount: ");
-            System.out.println("-----------------------------------");
-            e.printStackTrace();
-            System.out.println("-----------------------------------------------------");
+        String u = acc.getUsername();
+        String p = acc.getPassword();
+        
+        ResultSet rs = DaoFactory.getResultSet("insert into "+Main.userAccountTableName
+            +" (\"username\",\"password\") values(\""+ u +"\",\""+ p +"\");"
+        );
+        if(rs==null) {
+            System.err.println("[ResultSet is null in UserManager.addAccount]");
         }
+        else {
+            System.out.println("Account created");
+        }
+        // DaoFactory.getPreparedStatement("insert into "+Main.userAccountTableName
+        //     +" (\"username\",\"password\") values(\""
+        //     +u+"\",\""+p+"\");");
+        // try {
+            // DaoFactory.getPreparedStatement().setString(1, Main.userAccountTableName);
+            // DaoFactory.getPreparedStatement().setString(1, u);
+            // DaoFactory.getPreparedStatement().setString(2, p);
+            // DaoFactory.getPreparedStatement().executeQuery();
+            // System.out.println("Account created");
+        // } catch (SQLException e) {
+        //     System.out.print("SQLException in UserAccountManager.addAccount: ");
+        //     System.out.println("-----------------------------------");
+        //     e.printStackTrace();
+        //     System.out.println("-----------------------------------------------------");
+        // }
     }
 }

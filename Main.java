@@ -14,6 +14,7 @@ public class Main {
     public static void main(String[] args) {
         sql2ArrayList();
         Options.welcome();
+        System.out.println("Bye bye!");
     }
     
     static ArrayList<Book> sql2ArrayList() { // refreshes the bookArrayList
