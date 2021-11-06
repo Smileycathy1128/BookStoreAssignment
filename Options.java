@@ -1,8 +1,8 @@
 import java.util.InputMismatchException;
 
 public class Options {
+    protected static boolean welcomeLoop = true;
     static void welcome() {
-        boolean loop = true;
         do {
             System.out.println(
                 "============\n"+
@@ -23,9 +23,9 @@ public class Options {
                 continue;
             }            
             switch (num1) {
-                case 1: loggingIn(); loop = false;
+                case 1: loggingIn();
                     break;
-                case 2: register(); loggingIn(); loop = false;
+                case 2: register(); loggingIn();
                     break;
                 case 3: return;
                     // break;
@@ -34,19 +34,23 @@ public class Options {
                     break;
             }
 
-        } while (loop);
+        } while (welcomeLoop);
 
     }
     
     static void loggingIn() {
         System.out.print("Username: ");
         String username = DaoFactory.getScanner().next();
-        System.out.print("Password (not hidden): ");
-        String password = DaoFactory.getScanner().next();
         UserAccount temp = UserAccountManager.findAccount(username);
-        if(temp!=null) {
+        if(temp==null) {
             System.out.println("Username not found");
+            System.out.println("username entered: "+username);
+        }
+        else {
+            System.out.print("Password (not hidden): ");
+            String password = DaoFactory.getScanner().next();
             if(temp.getPassword().equals(password)) {
+                System.out.println("logging in...");
                 loggedIn(temp);
             }
         }
@@ -86,7 +90,7 @@ public class Options {
             // );
             int count = 0;
             for(String c : Main.allCategories) {
-                System.out.println("["+(count++)+"] "+c);
+                System.out.println("["+(++count)+"] "+c);
             }
             count = 0;
             System.out.println(

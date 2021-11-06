@@ -5,19 +5,22 @@ import java.util.ArrayList;
 public class Main {
     protected static String bookTableName = "library";
     protected static String userAccountTableName = "UserAccount";
-    protected static ArrayList<Book> bookArrayList;
     protected static String[] allCategories = { // TODO: add category names here:
         "tech",
         "literature",
         "non-fiction"
     };
+    protected static ArrayList<Book> bookArrayList;
+    protected static ArrayList<UserAccount> userAccountArrayList;
+    
     public static void main(String[] args) {
-        sql2ArrayList();
+        sql2ArrayListAccounts();
+        sql2ArrayListBooks();
         Options.welcome();
         System.out.println("Bye bye!");
     }
     
-    static ArrayList<Book> sql2ArrayList() { // refreshes the bookArrayList
+    static ArrayList<Book> sql2ArrayListBooks() { // refreshes the bookArrayList
         bookArrayList = new ArrayList<Book>();
         ResultSet resultSet = DaoFactory.getResultSet("select * from \""+Main.bookTableName+"\";");
         try {
@@ -30,7 +33,7 @@ public class Main {
                 bookArrayList.add(temp2);
             }
         } catch (SQLException e) {
-            System.err.print("Error in Main.sql2ArrayList(): ");
+            System.err.print("Error in Main.sql2ArrayListBooks(): ");
             System.out.println("-----------------------------------");
             e.printStackTrace();
             System.out.println("-----------------------------------------------------");
@@ -43,6 +46,30 @@ public class Main {
             return null;
         }
         
+    }
+    static ArrayList<UserAccount> sql2ArrayListAccounts() {
+        userAccountArrayList = new ArrayList<UserAccount>();
+        ResultSet resultSet = DaoFactory.getResultSet("select * from \""+Main.userAccountTableName+"\";");
+        try {
+            while (resultSet.next()) {
+                UserAccount temp = new UserAccount();
+                temp.setUsername(resultSet.getString(1));
+                temp.setPassword(resultSet.getString(2));
+                userAccountArrayList.add(temp);
+            }
+        } catch (SQLException e) {
+            System.err.print("Error in Main.sql2ArrayListAccounts(): ");
+            System.out.println("-----------------------------------");
+            e.printStackTrace();
+            System.out.println("-----------------------------------------------------");
+        }
+        if(userAccountArrayList.size()>0) {
+            return userAccountArrayList;
+        }
+        else {
+            System.err.println("No user accounts are in the ArrayList.");
+            return null;
+        }
     }
     
     static void printBookList() {
