@@ -18,7 +18,7 @@ public class Options {
             try {
                 num1 = DaoFactory.getScanner().nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("-----------------------------------------------------");
+                System.out.println("in Options.welcome: ---------------------------------");
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
                 System.out.println("Cannot accept strings");
@@ -56,11 +56,7 @@ public class Options {
                 "[1] Check cart\n"+
                 "----------------------\n"+
                 "[2] all books"
-            );            
-            // System.out.println(
-            //     "[1] all\n"+
-            //     "[2] tech\n"
-            // );
+            );
             int shift = 2; 
             int count = shift;
             for(String c : Main.allCategories) {
@@ -69,16 +65,19 @@ public class Options {
             System.out.println("----------------------");
             try {
                 temp1 = DaoFactory.getScanner().nextInt();
+                // TODO: After entering in once it keeps accepting something else, hence why the exception
+                // closeScanner doesn't work
+                DaoFactory.closeScanner();
             } catch (InputMismatchException e) {
-                System.out.print("InputMismatchException in Options.loggedIn: ");
-                System.out.println("-----------------------------------");
+                System.out.println("in Options.loggedIn: --------------------------------");
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
                 System.out.println("Not a number. Try again.");
                 rememberMe = true;
+                DaoFactory.closeScanner();
                 continue;
-            } 
-            switch(temp1) {
+            }
+            switch(temp1) { // TODO: troubleshooting bookmark
                 case 0:
                     System.out.println("Logging out...");
                     break;
@@ -98,8 +97,7 @@ public class Options {
                         } while (temp3);
                                                     
                     } catch (IndexOutOfBoundsException e) {
-                        System.out.print("IndexOutOfBoundsException: ");
-                        System.out.println("-----------------------------------");
+                        System.out.println("in Options.loggedIn: --------------------------------");
                         e.printStackTrace();
                         System.out.println("-----------------------------------------------------");
                         System.out.println("Invalid number. Try again.");
@@ -137,9 +135,10 @@ public class Options {
             System.out.print("Create a username: ");
             String username = DaoFactory.getScanner().next();
             if(UserAccountManager.findAccount(username)==null) {
-                // System.out.println("username is available");
-                System.out.print("Create a password: ");
+                System.out.println("Username is available!");
+                System.out.print("Create a password (not hidden): ");
                 String password = DaoFactory.getScanner().next();
+                DaoFactory.closeScanner();
                 userAcc.setUsername(username);
                 userAcc.setPassword(password);
                 UserAccountManager.addAccount(userAcc);

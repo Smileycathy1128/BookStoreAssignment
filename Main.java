@@ -26,17 +26,17 @@ public class Main {
         ResultSet resultSet = DaoFactory.getResultSet("select * from \""+Main.bookTableName+"\";");
         try {
             while (resultSet.next()) {
-                Book temp2 = new Book();
-                temp2.setISBN(resultSet.getString(1));
-                temp2.setTitle(resultSet.getString(2));
-                temp2.setAuthor(resultSet.getString(3));
-                temp2.categories = resultSet.getString(4).split(", ");
+                Book temp2 = new Book(
+                    resultSet.getString(1), 
+                    resultSet.getString(2),
+                    resultSet.getString(3),
+                    resultSet.getString(4).split(", ")
+                );
                 bookArrayList.add(temp2);
             }
             DaoFactory.closeResultSet();
         } catch (SQLException e) {
-            System.err.print("Error in Main.sql2ArrayListBooks(): ");
-            System.out.println("-----------------------------------");
+            System.err.println("in Main.sql2ArrayListBooks(): -----------------------");
             e.printStackTrace();
             System.out.println("-----------------------------------------------------");
         }
@@ -62,8 +62,7 @@ public class Main {
             }
             DaoFactory.closeResultSet();
         } catch (SQLException e) {
-            System.err.print("Error in Main.sql2ArrayListAccounts(): ");
-            System.out.println("-----------------------------------");
+            System.err.println("in Main.sql2ArrayListAccounts(): --------------------");
             e.printStackTrace();
             System.out.println("-----------------------------------------------------");
         }
@@ -105,8 +104,7 @@ public class Main {
             tempInt = DaoFactory.getScanner().nextInt();
             DaoFactory.closeScanner();
         } catch (InputMismatchException e) {
-            System.out.print("InputMismatchException in Main.pickingBook2Check: ");
-            System.out.println("-----------------------------------");
+            System.out.println("in Main.pickingBook2Check: --------------------------");
             e.printStackTrace();
             System.out.println("-----------------------------------------------------");
             System.out.println("Not a number. Try again.");
@@ -122,7 +120,7 @@ public class Main {
                     ask2Purchase( userAcc, tempBook);
                 }
                 catch (IndexOutOfBoundsException e) {
-                    System.out.println("-----------------------------------");
+                    System.out.println("in Main.pickingBook2Check: --------------------------");
                     e.printStackTrace();
                     System.out.println("-----------------------------------------------------");
                     System.out.println("Invalid number");
@@ -177,12 +175,11 @@ class Book {
     private String author;
     protected String[] categories;
     
-    public Book () {
-
-    }
-    public Book(String isbn, String title) {
+    public Book(String isbn, String title, String author, String[] categories) {
         this.isbn = isbn;
         this.title = title;
+        this.author = author;
+        this.categories = categories;
     }
 
     public String getISBN() {
@@ -193,15 +190,5 @@ class Book {
     }
     public String getAuthor() {
         return author;
-    }
-    
-    public void setISBN(String isbn) {
-        this.isbn = isbn;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public void setAuthor(String author) {
-        this.author = author;
     }
 }

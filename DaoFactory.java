@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class DaoFactory { // creates, manages, and makes sure there is just one of each DAO
+    private static String connectionString = "jdbc:sqlite:BookStore.db";
+    
     static Connection connect = null;
     static Statement statement = null;
     static PreparedStatement prep = null;
@@ -16,10 +18,9 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
     private static Connection getConnection(){
         if(connect == null) {
             try {
-                connect = DriverManager.getConnection("jdbc:sqlite:BookStore.db");
+                connect = DriverManager.getConnection(connectionString);
             } catch (SQLException e2) {
-                System.out.print("[Unable to get Connection]: ");
-                System.out.println("-----------------------------------");
+                System.out.println("[Unable to get Connection]: ---------------------------");
                 e2.printStackTrace();
                 System.out.println("-------------------------------------------------------");
             }
@@ -35,10 +36,9 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
             try {
                 connect.close();
             } catch (SQLException e) {
-                System.out.print("[Cannot closeConnection]: ");
-                System.out.println("-----------------------------------");
+                System.out.println("[Cannot closeConnection]: -----------------------");
                 e.printStackTrace();
-                System.out.println("-----------------------------------------------------");
+                System.out.println("-------------------------------------------------");
             }
             connect = null;
         }
@@ -49,8 +49,7 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
             try {
                 statement = getConnection().createStatement();
             } catch (SQLException e) {
-                System.out.print("[Cannot createStatement]: ");
-                System.out.println("-----------------------------------");
+                System.out.println("[Cannot createStatement]: ---------------------------");
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
             }
@@ -66,8 +65,7 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
                 statement.close();
                 closeConnection();
             } catch (SQLException e) {
-                System.out.print("[Cannot closeStatement]: ");
-                System.out.println("-----------------------------------");
+                System.out.println("[Cannot closeStatement]: ----------------------------");
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
             }
@@ -87,8 +85,7 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
             try {
                 prep = getConnection().prepareStatement(str);
             } catch (SQLException e) {
-                System.out.print("[Cannot create PrepareStatement]: ");
-                System.out.println("-----------------------------------");
+                System.out.println("[Cannot create PrepareStatement]: -------------------");
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
             }
@@ -108,8 +105,7 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
                 prep.close();
                 closeConnection();
             } catch (SQLException e) {
-                System.out.print("[Cannot closePreparedStatement]: ");
-                System.out.println("-----------------------------------");
+                System.out.println("[Cannot closePreparedStatement]: --------------------");
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
             }
@@ -122,9 +118,7 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
             try {
                 rs = getStatement().executeQuery(sqlString);   
             } catch (SQLException e) {
-                System.out.println("This error again! :D");
-                System.out.print("[Cannot create ResultSet]: ");
-                System.out.println("-----------------------------------");
+                System.out.println("[Cannot create ResultSet]: --------------------------");
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
             }
@@ -140,8 +134,7 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
                 rs.close();
                 closeStatement();
             } catch (SQLException e) {
-                System.out.println("-----------------------------------");
-                System.out.print("[Cannot closeResultSet]: ");
+                System.out.println("[Cannot closeResultSet]: -----------------------------");
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
             }
@@ -164,4 +157,5 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
             scan = null;
         }
     }
+    
 }
