@@ -97,9 +97,11 @@ public class UserAccountManager {
             System.err.println("[ResultSet is null in UserManager.addAccount]");
         }
         else {
-            System.out.println("Account created");
-            Main.userAccountArrayList.add(acc);
+            System.err.println("Yay! [ResultSet is NOT null in UserManager.addAccount]");
         }
+        System.out.println("Account created");
+        Main.userAccountArrayList.add(acc);
+        
         // DaoFactory.getPreparedStatement("insert into "+Main.userAccountTableName
         //     +" (\"username\",\"password\") values(\""
         //     +u+"\",\""+p+"\");");

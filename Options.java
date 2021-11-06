@@ -27,7 +27,7 @@ public class Options {
             switch (num1) {
                 case 1: loggingIn(); welcomeLoop = true;
                     break;
-                case 2: register(); loggingIn(); welcomeLoop = true;
+                case 2: register(); welcomeLoop = true;
                     break;
                 case 3: return;
                     // break;
