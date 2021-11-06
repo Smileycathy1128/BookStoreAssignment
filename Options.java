@@ -51,21 +51,22 @@ public class Options {
                 "Browsing by categories:\n"+
                 "-----------------------\n"
             );
+            System.out.println( // if adding more options, add to int shift
+                "[0] Log out\n"+
+                "[1] Check cart\n"+
+                "----------------------\n"+
+                "[2] all books"
+            );            
             // System.out.println(
             //     "[1] all\n"+
             //     "[2] tech\n"
             // );
-            int count = 0;
+            int shift = 2; 
+            int count = shift;
             for(String c : Main.allCategories) {
                 System.out.println("["+(++count)+"] "+c);
             }
-            count = 0;
-            System.out.println(
-                "[0] Log out"+
-                "[1] Check cart"+
-                "----------------------"+
-                "[2] all books"
-            );
+            System.out.println("----------------------");
             try {
                 temp1 = DaoFactory.getScanner().nextInt();
             } catch (InputMismatchException e) {
@@ -92,7 +93,7 @@ public class Options {
                         do {
                             temp3 = false;
                             // remember temp1 is shifted because of all books, log out, and check cart
-                            ArrayList<Book> temp2 = Main.getAndPrintBookListOfCategory(Main.allCategories[temp1-2]);
+                            ArrayList<Book> temp2 = Main.getAndPrintBookListOfCategory(Main.allCategories[temp1-shift]);
                             temp3 = Main.pickingBook2Check(userAcc, temp2);
                         } while (temp3);
                                                     

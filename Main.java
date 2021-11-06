@@ -90,7 +90,7 @@ public class Main {
         int count = 0;
         for(Book book : list) {
             for(String s : book.categories) {
-                if(s.equals(category)) {
+                if(s.equals(category)) { // TODO: check what's wrong with this
                     list.add(book);
                 }
             }
@@ -154,7 +154,7 @@ public class Main {
                     System.out.println("going back to list...");
                     tempBool = false;
                     break;
-                default: // TODO: invalid input
+                default:
                     System.out.println("Invalid input. y/n");
                     tempBool = true;
                     break;
