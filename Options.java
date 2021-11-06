@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 public class Options {
@@ -41,6 +42,74 @@ public class Options {
 
     }
     
+    static void loggedIn(UserAccount userAcc) {
+        int temp1;
+        boolean rememberMe = false; // Haha. I'm funny.
+        do {
+            System.out.println(
+                "=======================\n"+
+                "Browsing by categories:\n"+
+                "-----------------------\n"
+            );
+            // System.out.println(
+            //     "[1] all\n"+
+            //     "[2] tech\n"
+            // );
+            int count = 0;
+            for(String c : Main.allCategories) {
+                System.out.println("["+(++count)+"] "+c);
+            }
+            count = 0;
+            System.out.println(
+                "[0] Log out"+
+                "[1] Check cart"+
+                "----------------------"+
+                "[2] all books"
+            );
+            try {
+                temp1 = DaoFactory.getScanner().nextInt();
+            } catch (InputMismatchException e) {
+                System.out.print("InputMismatchException in Options.loggedIn: ");
+                System.out.println("-----------------------------------");
+                e.printStackTrace();
+                System.out.println("-----------------------------------------------------");
+                System.out.println("Not a number. Try again.");
+                rememberMe = true;
+                continue;
+            } 
+            switch(temp1) {
+                case 0:
+                    System.out.println("Logging out...");
+                    break;
+                case 1:
+                    Main.printBookList(userAcc.getCart());
+                    break;
+                case 2: Main.printBookList();
+                    break;
+                default:
+                    try {
+                        Boolean temp3;
+                        do {
+                            temp3 = false;
+                            // remember temp1 is shifted because of all books, log out, and check cart
+                            ArrayList<Book> temp2 = Main.getAndPrintBookListOfCategory(Main.allCategories[temp1-2]);
+                            temp3 = Main.pickingBook2Check(userAcc, temp2);
+                        } while (temp3);
+                                                    
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.print("IndexOutOfBoundsException: ");
+                        System.out.println("-----------------------------------");
+                        e.printStackTrace();
+                        System.out.println("-----------------------------------------------------");
+                        System.out.println("Invalid number. Try again.");
+                        rememberMe = true;
+                    }
+                    break;
+            }
+            
+        } while (rememberMe);
+    }
+    
     static void loggingIn() {
         System.out.print("Username: ");
         String username = DaoFactory.getScanner().next();
@@ -79,65 +148,6 @@ public class Options {
                 registerLoop = true;
             }
         } while (registerLoop);
-
-
     }
     
-    static void loggedIn(UserAccount userAcc) {
-        int temp;
-        boolean loop = false;
-        do {
-            System.out.println(
-                "=======================\n"+
-                "Browsing by categories:\n"+
-                "-----------------------\n"
-            );
-            // System.out.println(
-            //     "[1] all\n"+
-            //     "[2] tech\n"
-            // );
-            int count = 0;
-            for(String c : Main.allCategories) {
-                System.out.println("["+(++count)+"] "+c);
-            }
-            count = 0;
-            System.out.println(
-                "[0] Log out"+
-                "----------------------"
-            );
-            try {
-                temp = DaoFactory.getScanner().nextInt();
-            } catch (InputMismatchException e) {
-                System.out.print("InputMismatchException in Options.loggedIn: ");
-                System.out.println("-----------------------------------");
-                e.printStackTrace();
-                System.out.println("-----------------------------------------------------");
-                System.out.println("Not a number. Try again.");
-                loop = true;
-                continue;
-            } 
-            switch(temp) {
-                case 0:
-                    System.out.println("Logging out...");
-                    break;
-                case 1: Main.printBookList();
-                    break;
-                default:
-                    try {
-                        Main.pickBook2Check(
-                            Main.getAndPrintBookListOfCategory(Main.allCategories[temp])
-                        );                            
-                    } catch (IndexOutOfBoundsException e) {
-                        System.out.print("IndexOutOfBoundsException: ");
-                        System.out.println("-----------------------------------");
-                        e.printStackTrace();
-                        System.out.println("-----------------------------------------------------");
-                        System.out.println("Invalid number. Try again.");
-                        loop = true;
-                    }
-                    break;
-            }
-            
-        } while (loop);
-    }
 }
