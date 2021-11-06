@@ -89,10 +89,10 @@ public class UserAccountManager {
     protected static void addAccount(UserAccount acc) {
         String u = acc.getUsername();
         String p = acc.getPassword();
-        
-        ResultSet rs = DaoFactory.getResultSet("insert into "+Main.userAccountTableName
-            +" (\"username\",\"password\") values(\""+ u +"\",\""+ p +"\");"
-        );
+        String tempString = "insert into "+Main.userAccountTableName
+            +" (\"username\",\"password\") values(\""+ u +"\",\""+ p +"\");";
+        System.out.println(tempString);
+        ResultSet rs = DaoFactory.getResultSet(tempString);
         if(rs==null) {
             System.err.println("[ResultSet is null in UserManager.addAccount]");
         }
@@ -115,5 +115,6 @@ public class UserAccountManager {
         //     e.printStackTrace();
         //     System.out.println("-----------------------------------------------------");
         // }
+        DaoFactory.closeResultSet();
     }
 }

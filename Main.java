@@ -31,8 +31,8 @@ public class Main {
                 temp2.setAuthor(resultSet.getString(3));
                 temp2.categories = resultSet.getString(4).split(", ");
                 bookArrayList.add(temp2);
-                System.out.println(bookArrayList.size());
             }
+            DaoFactory.closeResultSet();
         } catch (SQLException e) {
             System.err.print("Error in Main.sql2ArrayListBooks(): ");
             System.out.println("-----------------------------------");
@@ -59,6 +59,7 @@ public class Main {
                 temp.setPassword(resultSet.getString(2));
                 userAccountArrayList.add(temp);
             }
+            DaoFactory.closeResultSet();
         } catch (SQLException e) {
             System.err.print("Error in Main.sql2ArrayListAccounts(): ");
             System.out.println("-----------------------------------");
