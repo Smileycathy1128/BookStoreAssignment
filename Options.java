@@ -49,18 +49,18 @@ public class Options {
             System.out.println(
                 "=======================\n"+
                 "Browsing by categories:\n"+
-                "-----------------------\n"
+                "-----------------------"
             );
-            System.out.println( // if adding more options, add to int shift
+            System.out.println( // if adding more options, change shift to the int after 'all books'
                 "[0] Log out\n"+
                 "[1] Check cart\n"+
                 "----------------------\n"+
                 "[2] all books"
             );
-            int shift = 2; 
+            int shift = 3; 
             int count = shift;
             for(String c : Main.allCategories) {
-                System.out.println("["+(++count)+"] "+c);
+                System.out.println("["+(count++)+"] "+c);
             }
             System.out.println("----------------------");
             try {
@@ -83,8 +83,11 @@ public class Options {
                     break;
                 case 1:
                     Main.printBookList(userAcc.getCart());
+                    rememberMe = true;
                     break;
-                case 2: Main.printBookList();
+                case 2:
+                    Main.printBookList();
+                    rememberMe = true;
                     break;
                 default:
                     try {
@@ -103,6 +106,7 @@ public class Options {
                         System.out.println("Invalid number. Try again.");
                         rememberMe = true;
                     }
+                    rememberMe = true;
                     break;
             }
             

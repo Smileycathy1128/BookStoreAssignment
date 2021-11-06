@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 public class Main {
+    // ==========================================================
     protected static String bookTableName = "library";
     protected static String userAccountTableName = "UserAccount";
-    protected static String[] allCategories = { // TODO: add category names here:
+    // TODO: add category names here:
+    protected static String[] allCategories = { 
         "tech",
         "literature",
+        "sci-fi",
         "non-fiction"
     };
+    // ==========================================================
     protected static ArrayList<Book> bookArrayList;
     protected static ArrayList<UserAccount> userAccountArrayList;
     
@@ -79,6 +83,7 @@ public class Main {
         printBookList(bookArrayList); 
     }
     static void printBookList(ArrayList<Book> books) {
+        System.out.println("ISBN\t\tTitle\t\t\tAuthor");
         for(Book book : books) {
             System.out.println(book.getISBN()+"\t"+book.getTitle()+"\t"+book.getAuthor());
         }
@@ -87,6 +92,11 @@ public class Main {
     static ArrayList<Book> getAndPrintBookListOfCategory(String category) {
         ArrayList<Book> list = new ArrayList<Book>();
         int count = 0;
+        System.out.println("============================================================");
+        System.out.println("Category: "+ category);
+        System.out.println("------------------------------------------------------------");
+        System.out.println("ISBN\t\tTitle\t\t\tAuthor");
+        System.out.println("------------------------------------------------------------");
         for(Book book : list) {
             for(String s : book.categories) {
                 if(s.equals(category)) { // TODO: check what's wrong with this
@@ -95,6 +105,7 @@ public class Main {
             }
             System.out.println("["+(++count)+"] "+book.getISBN()+"\t"+book.getTitle()+"\t"+book.getAuthor());
         }
+        System.out.println("------------------------------------------------------------");
         return list;
     }
     static Boolean pickingBook2Check(UserAccount userAcc , ArrayList<Book> arr) { // Don't put the loop here. Put it somewhere else.

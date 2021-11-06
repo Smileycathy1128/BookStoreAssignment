@@ -7,7 +7,9 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class DaoFactory { // creates, manages, and makes sure there is just one of each DAO
+    // =================================================================
     private static String connectionString = "jdbc:sqlite:BookStore.db";
+    // =================================================================
     
     static Connection connect = null;
     static Statement statement = null;
