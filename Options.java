@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 
 public class Options {
     protected static boolean welcomeLoop = true;
@@ -26,9 +27,9 @@ public class Options {
                 continue;
             }            
             switch (num1) {
-                case 1: loggingIn(); welcomeLoop = true;
+                case 1: welcomeLoop = true;loggingIn();
                     break;
-                case 2: register(); welcomeLoop = true;
+                case 2: welcomeLoop = true; register();
                     break;
                 case 3: return;
                     // break;
@@ -65,19 +66,19 @@ public class Options {
             System.out.println("----------------------");
             try {
                 temp1 = DaoFactory.getScanner().nextInt();
-                // TODO: After entering in once it keeps accepting something else, hence why the exception
-                // closeScanner doesn't work
-                DaoFactory.closeScanner();
             } catch (InputMismatchException e) {
                 System.out.println("in Options.loggedIn: --------------------------------");
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
                 System.out.println("Not a number. Try again.");
                 rememberMe = true;
-                DaoFactory.closeScanner();
                 continue;
+            } catch(NoSuchElementException e) { // TODO: band-aid
+                e.printStackTrace();
+                System.out.println("[automatically setting to 3...]");
+                temp1 = 3;
             }
-            switch(temp1) { // TODO: troubleshooting bookmark
+            switch(temp1) {
                 case 0:
                     System.out.println("Logging out...");
                     break;
@@ -109,7 +110,7 @@ public class Options {
                     rememberMe = true;
                     break;
             }
-            
+            // DaoFactory.closeScanner();
         } while (rememberMe);
     }
     
@@ -125,6 +126,7 @@ public class Options {
             String password = DaoFactory.getScanner().next();
             if(temp.getPassword().equals(password)) {
                 System.out.println("logging in...");
+                // DaoFactory.closeScanner();
                 loggedIn(temp);
             }
         }
@@ -142,7 +144,6 @@ public class Options {
                 System.out.println("Username is available!");
                 System.out.print("Create a password (not hidden): ");
                 String password = DaoFactory.getScanner().next();
-                DaoFactory.closeScanner();
                 userAcc.setUsername(username);
                 userAcc.setPassword(password);
                 UserAccountManager.addAccount(userAcc);

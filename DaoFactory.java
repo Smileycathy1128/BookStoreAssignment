@@ -145,7 +145,7 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
     }
     
     static Scanner getScanner() {
-        if(scan == null) {
+        while(scan == null) {
             scan = new Scanner(System.in);
         }
         return scan;

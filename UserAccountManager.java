@@ -27,7 +27,7 @@ class UserAccount {
         return cart;
     }
     void addToCart(Book book) {
-        cart.add(book);
+        getCart().add(book);
     }
     
     Book getBook(String isbn) {

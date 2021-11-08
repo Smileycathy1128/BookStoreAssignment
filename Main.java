@@ -2,6 +2,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 
 public class Main {
     // ==========================================================
@@ -12,7 +13,15 @@ public class Main {
         "tech",
         "literature",
         "sci-fi",
-        "non-fiction"
+        "non-fiction",
+        "history",
+        "fantasy",
+        "comedy",
+        "romance",
+        "historical fiction",
+        "comic",
+        "action",
+        "horror"
     };
     // ==========================================================
     protected static ArrayList<Book> bookArrayList;
@@ -23,6 +32,9 @@ public class Main {
         sql2ArrayListBooks();
         Options.welcome();
         System.out.println("Bye bye!");
+        DaoFactory.closeScanner(); 
+        // if you close it earlier, you'll get a NoSuchElementException
+        // Use it for testing
     }
     
     static ArrayList<Book> sql2ArrayListBooks() { // refreshes the bookArrayList
@@ -97,13 +109,14 @@ public class Main {
         System.out.println("------------------------------------------------------------");
         System.out.println("ISBN\t\tTitle\t\t\tAuthor");
         System.out.println("------------------------------------------------------------");
-        for(Book book : list) {
-            for(String s : book.categories) {
-                if(s.equals(category)) { // TODO: check what's wrong with this
+        for(Book book : bookArrayList) {
+            for(String s : book.categories) { // use getCategories()?
+                if(s.equals(category)) {
                     list.add(book);
+                    System.out.println("["+(++count)+"] "+book.getISBN()+"\t"+book.getTitle()+"\t"+book.getAuthor());
                 }
+                break; // Probably not necessary
             }
-            System.out.println("["+(++count)+"] "+book.getISBN()+"\t"+book.getTitle()+"\t"+book.getAuthor());
         }
         System.out.println("------------------------------------------------------------");
         return list;
@@ -113,13 +126,16 @@ public class Main {
         System.out.print("Choose a book to check (Enter 0 to go back): "); // method called after options are already printed
         try {
             tempInt = DaoFactory.getScanner().nextInt();
-            DaoFactory.closeScanner();
         } catch (InputMismatchException e) {
             System.out.println("in Main.pickingBook2Check: --------------------------");
             e.printStackTrace();
             System.out.println("-----------------------------------------------------");
             System.out.println("Not a number. Try again.");
             return true;
+        } catch (NoSuchElementException e2) {
+            e2.printStackTrace();
+            System.out.println("[Entering 1...]"); // TODO: band-aid
+            tempInt = 1;
         }
         switch(tempInt) {
             case 0:
@@ -129,6 +145,7 @@ public class Main {
                 try {
                     Book tempBook = arr.get(tempInt-1); // tempInt-1 because the exit option is squeezed into 0
                     ask2Purchase( userAcc, tempBook);
+                    return true;
                 }
                 catch (IndexOutOfBoundsException e) {
                     System.out.println("in Main.pickingBook2Check: --------------------------");
@@ -137,9 +154,8 @@ public class Main {
                     System.out.println("Invalid number");
                     return true;
                 }
-                break;
+
         }
-        return false;
 
     }
     static void ask2Purchase(UserAccount userAcc, Book book) {
@@ -149,14 +165,34 @@ public class Main {
         System.out.println("ISBN: "+ book.getISBN());
         System.out.println("-----------------------------------");
         System.out.print("Press Enter to continue");
-        DaoFactory.getScanner().next();
+        try {
+            DaoFactory.getScanner().nextLine();
+        } catch (NoSuchElementException e) { // TODO" band-aid
+            e.printStackTrace();
+            System.out.println("[auto-advancing...]");
+        }
         boolean tempBool;
+        String purchaseStr;
         do {
             System.out.println("Purchase \""+ book.getTitle() +"\"? (y/n)");
-            switch (DaoFactory.getScanner().nextLine()) {
+            try {
+                purchaseStr = DaoFactory.getScanner().nextLine();
+            } catch (NoSuchElementException e) { // TODO: band-aid
+                e.printStackTrace();
+                System.out.println("[Automatically selecting 'y']");
+                purchaseStr = "y";
+            }
+            switch (purchaseStr) {
                 case "y":
                     userAcc.addToCart(book);
                     System.out.println("Book added to cart");
+                    System.out.print("returning to book selection...");
+                    try {
+                        DaoFactory.getScanner().next();
+
+                    } catch (NoSuchElementException e) {
+                    System.out.println("[Automatically advancing...]");
+                    }
                     tempBool = false;
                     break;
                 case "n":
@@ -172,6 +208,10 @@ public class Main {
 
 
     }
+    static void checkingCart() {
+        // TODO:
+    }
+    
     static void printReceipt(ArrayList<Book> cart) {
         System.out.println("Receipt:");;
         for(Book book : cart) {
