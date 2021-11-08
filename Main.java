@@ -90,21 +90,21 @@ public class Main {
         }
     }
     
-    static void printBookList() {
-        printBookList(bookArrayList); 
+    static void printBookList(int shift) {
+        printBookList(bookArrayList, shift); 
     }
-    static void printBookList(ArrayList<Book> books) {
+    static void printBookList(ArrayList<Book> books, int shift) {
         int count = 0;
         System.out.println("------------------------------------------------------------");
         System.out.println("ISBN\t\tTitle\t\t\tAuthor");
         System.out.println("------------------------------------------------------------");
         for(Book book : books) {
-            System.out.println("["+(++count)+"] "+book.getISBN()+"\t"+book.getTitle()+"\t"+book.getAuthor());
+            System.out.println("["+((count++)+shift)+"] "+book.getISBN()+"\t"+book.getTitle()+"\t"+book.getAuthor());
         }
         System.out.println("------------------------------------------------------------");
     }
     
-    static ArrayList<Book> getAndPrintBookListOfCategory(String category) {
+    static ArrayList<Book> getAndPrintBookListOfCategory(String category, int shift) {
         ArrayList<Book> list = new ArrayList<Book>();
         System.out.println("============================================================");
         System.out.println("Category: "+ category);
@@ -120,14 +120,12 @@ public class Main {
                 break; // Probably not necessary
             }
         }
-        printBookList(list);
+        printBookList(list, shift);
         return list;
     }
-    
-    // TODO: separate these into two methods pickBook and buyBook. Use with Options.cartOptions
-    static Boolean pickingBook2Check(UserAccount userAcc , ArrayList<Book> arr) { // Don't put the loop here. Put it somewhere else.
+    static Boolean pickingBook2Check(UserAccount userAcc , ArrayList<Book> arr, boolean inCart, int shift) { // Don't put the loop here. Put it somewhere else.
         int tempInt;
-        System.out.print("Choose a book to check (Enter 0 to go back): "); // method called after options are already printed
+        System.out.print("Pick a book to check (Enter 0 to go back): "); // method called after options are already printed
         try {
             tempInt = DaoFactory.getScanner().nextInt();
         } catch (InputMismatchException e) {
@@ -142,14 +140,23 @@ public class Main {
             System.out.println("[Entering 0...]");
             tempInt = 0;
         }
-        switch(tempInt) {
+        return pickingBook2Check(userAcc, arr, tempInt, inCart, shift);
+    }
+    static Boolean pickingBook2Check(UserAccount userAcc , ArrayList<Book> arr, int userInput, boolean inCart, int shift) { // Don't put the loop here. Put it somewhere else.
+
+        switch(userInput) {
             case 0:
                 System.out.println("Going back to categories...");
                 return false;
             default:
                 try {
-                    Book tempBook = arr.get(tempInt-1); // tempInt-1 because the exit option is squeezed into 0
-                    ask2Purchase( userAcc, tempBook);
+                    Book tempBook = arr.get(userInput-shift); // shift because the exit option, and other options, is squeezed into 0,1,2, etc.
+                    if(inCart) {
+                        ask2PurchaseOrRemove( userAcc, tempBook, false); // TODO: temporary fix
+                    }
+                    else {
+                        ask2PurchaseOrRemove( userAcc, tempBook, true); // TODO: temporary fix
+                    }
                     return true;
                 }
                 catch (IndexOutOfBoundsException e) {
@@ -159,17 +166,16 @@ public class Main {
                     System.out.println("Invalid number");
                     return true;
                 }
-
         }
-
     }
-    static void ask2Purchase(UserAccount userAcc, Book book) {
+    // TODO: Later, separate this into two methods. Use with Options.cartOptions and Main.pickingBook2Check
+    static void ask2PurchaseOrRemove(UserAccount userAcc, Book book, boolean purchase) {
         System.out.println("-----------------------------------");
         System.out.println("Title: "+ book.getTitle());
         System.out.println("Author: "+ book.getAuthor());
         System.out.println("ISBN: "+ book.getISBN());
         System.out.println("-----------------------------------");
-        System.out.println("Press Enter to continue");
+        System.out.println("Press Enter anything, but not nothing, to continue");
         try {
             DaoFactory.getScanner().nextLine();
         } 
@@ -178,42 +184,47 @@ public class Main {
             System.out.println("[auto-advancing...]");
         }
         boolean tempBool;
-        String purchaseStr;
-        do {
-            System.out.println("Purchase \""+ book.getTitle() +"\"? (y/n)");
-            try {
-                purchaseStr = DaoFactory.getScanner().nextLine();
-            } 
-            catch (NoSuchElementException e) {
-                e.printStackTrace();
-                System.out.println("[Automatically selecting n]");
-                purchaseStr = "n";
-            }
-            switch (purchaseStr) {
-                case "y":
-                    userAcc.addToCart(book);
-                    System.out.println("Book added to cart");
-                    System.out.print("returning to book selection...");
-                    try {
-                        DaoFactory.getScanner().next();
-                    } 
-                    catch (NoSuchElementException e) {
-                    System.out.println("[Automatically advancing...]");
-                    }
-                    tempBool = false;
-                    break;
-                case "n":
-                    System.out.println("going back to list...");
-                    tempBool = false;
-                    break;
-                default:
-                    System.out.println("Invalid input. y/n");
-                    tempBool = true;
-                    break;
-            }
-        } while (tempBool);
-
-
+        
+        if(purchase) {
+            do {
+                String purchaseStr;
+                System.out.println("Purchase \""+ book.getTitle() +"\"? (y/n)");
+                try {
+                    purchaseStr = DaoFactory.getScanner().nextLine();
+                } 
+                catch (NoSuchElementException e) {
+                    e.printStackTrace();
+                    System.out.println("[Automatically selecting n]");
+                    purchaseStr = "n";
+                }
+                switch (purchaseStr) {
+                    case "y":
+                        userAcc.addToCart(book);
+                        System.out.println("Book added to cart");
+                        System.out.print("returning to book selection...");
+                        try {
+                            DaoFactory.getScanner().next();
+                        } 
+                        catch (NoSuchElementException e) {
+                        System.out.println("[Automatically advancing...]");
+                        }
+                        tempBool = false;
+                        break;
+                    case "n":
+                        System.out.println("going back to list...");
+                        tempBool = false;
+                        break;
+                    default:
+                        System.out.println("Invalid input. y/n");
+                        tempBool = true;
+                        break;
+                }
+            } while (tempBool);
+        }
+        else {
+            // remove from cart
+        }
+        
     }
     
     static void printReceipt(ArrayList<Book> cart) {

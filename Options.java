@@ -85,15 +85,15 @@ public class Options {
                     rememberMe = false;
                     break;
                 case 1:
-                    cartOptions(userAcc.getCart());
+                    cartOptions(userAcc, userAcc.getCart());
                     rememberMe = true;
                     break;
                 case 2:
                     Boolean temp4;
                     do{
                         temp4 = false;
-                        Main.printBookList();
-                        temp4 = Main.pickingBook2Check(userAcc, Main.bookArrayList);                        
+                        Main.printBookList(shift);
+                        temp4 = Main.pickingBook2Check(userAcc, Main.bookArrayList, true, 2);                        
                     } while(temp4);
                     rememberMe = true;
                     break;
@@ -103,8 +103,8 @@ public class Options {
                         do {
                             temp3 = false;
                             // remember temp1 is shifted because of all books, log out, and check cart
-                            ArrayList<Book> temp2 = Main.getAndPrintBookListOfCategory(Main.allCategories[temp1-shift]);
-                            temp3 = Main.pickingBook2Check(userAcc, temp2);
+                            ArrayList<Book> temp2 = Main.getAndPrintBookListOfCategory(Main.allCategories[temp1-shift], shift);
+                            temp3 = Main.pickingBook2Check(userAcc, temp2, false, 1);
                         } while (temp3);
                                                     
                     } catch (IndexOutOfBoundsException e) {
@@ -162,24 +162,50 @@ public class Options {
         } while (registerLoop);
     }
     
-    static void cartOptions(ArrayList<Book> cart) {
-        boolean loop;
-        int tempInt;
+    static void cartOptions(UserAccount userAcc, ArrayList<Book> cart) {
+        boolean loop1;
+        int shift = 2;
+        // int tempInt;
         do {
-            loop = false;
+            loop1 = false;
+
             System.out.println("====================================");
             System.out.println("Your Cart");
             System.out.println("------------------------------------");
-            Main.printBookList(cart);
-            System.out.println("Select an item or press 0 to cancel");
+            Main.printBookList(cart, shift);
+            System.out.println("Select an item, press 0 to cancel, press 1 to print receipt.");
+            // try {
+            //     tempInt = DaoFactory.getScanner().nextInt();
+            //     loop = false;
+            // } catch (InputMismatchException e) {
+            //     System.out.println("This put only accepts numbers. Try again.");
+            //     loop = true;
+            // }
+            int tempInt;
             try {
                 tempInt = DaoFactory.getScanner().nextInt();
-                loop = false;
+                switch (tempInt) {
+                    case 0:
+                        loop1 = false;
+                        break;
+                    case 1:
+                        Main.printBookList(cart, 1);
+                        break;      
+                    default:
+                        loop1 = Main.pickingBook2Check(userAcc, cart, tempInt, true, shift);
+                        break;
+                }
             } catch (InputMismatchException e) {
-                System.out.println("This put only accepts numbers. Try again.");
-                loop = true;
+                System.out.println("must enter a number");
+                loop1 = true;
+                continue;
             }
-        } while (loop);
+            
+
+            
+           
+        } while (loop1);
+        
         // TODO: check other todo
     }
     
