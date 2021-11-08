@@ -1,4 +1,3 @@
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 class UserAccount {
@@ -30,13 +29,13 @@ class UserAccount {
         getCart().add(book);
     }
     
-    Book getBook(String isbn) {
+    Book getBook(String title) {
         for(Book book : cart) {
-            if(book.getTitle().equals(isbn)) {
+            if(book.getTitle().equals(title)) {
                 return book;
             }
         }
-        System.err.println("Cannot getBook: Cannot find book with ISBN "+ isbn);
+        System.err.println("Cannot getBook: Cannot find book with ISBN "+ title);
         return null;
     }
     
@@ -69,15 +68,7 @@ public class UserAccountManager {
         String p = acc.getPassword();
         String tempString = "insert into "+Main.userAccountTableName
             +" (\"username\",\"password\") values(\""+ u +"\",\""+ p +"\");";
-        System.out.println(tempString);
-        ResultSet rs = DaoFactory.getResultSet(tempString);
-        if(rs==null) {
-            System.err.println("[ResultSet is null in UserManager.addAccount]");
-        }
-        else {
-            System.err.println("Yay! [ResultSet is NOT null in UserManager.addAccount]");
-        }
-        DaoFactory.closeResultSet();
+        DaoFactory.executeStatement(tempString);
         System.out.println("Account created");
         Main.userAccountArrayList.add(acc);
     }

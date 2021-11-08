@@ -120,7 +120,7 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
             try {
                 rs = getStatement().executeQuery(sqlString);   
             } catch (SQLException e) {
-                System.out.println("[Cannot create ResultSet]: --------------------------");
+                System.out.println("[Cannot get ResultSet]: --------------------------");
                 e.printStackTrace();
                 System.out.println("-----------------------------------------------------");
             }
@@ -143,7 +143,15 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
             rs = null;
         }
     }
-    
+    static void executeStatement(String str) { // use this if you are not expecting a ResultSet
+        try {
+            getStatement().execute(str);
+        } catch (SQLException e) {
+            System.out.println("[Cannot executeStatement]: --------------------------");
+            e.printStackTrace();
+            System.out.println("-----------------------------------------------------");
+        }
+    }
     static Scanner getScanner() {
         while(scan == null) {
             scan = new Scanner(System.in);

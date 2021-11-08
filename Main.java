@@ -8,7 +8,6 @@ public class Main {
     // ==========================================================
     protected static String bookTableName = "library";
     protected static String userAccountTableName = "UserAccount";
-    // TODO: add category names here:
     protected static String[] allCategories = { 
         "tech",
         "literature",
@@ -95,32 +94,37 @@ public class Main {
         printBookList(bookArrayList); 
     }
     static void printBookList(ArrayList<Book> books) {
+        int count = 0;
+        System.out.println("------------------------------------------------------------");
         System.out.println("ISBN\t\tTitle\t\t\tAuthor");
+        System.out.println("------------------------------------------------------------");
         for(Book book : books) {
-            System.out.println(book.getISBN()+"\t"+book.getTitle()+"\t"+book.getAuthor());
+            System.out.println("["+(++count)+"] "+book.getISBN()+"\t"+book.getTitle()+"\t"+book.getAuthor());
         }
+        System.out.println("------------------------------------------------------------");
     }
     
     static ArrayList<Book> getAndPrintBookListOfCategory(String category) {
         ArrayList<Book> list = new ArrayList<Book>();
-        int count = 0;
         System.out.println("============================================================");
         System.out.println("Category: "+ category);
-        System.out.println("------------------------------------------------------------");
-        System.out.println("ISBN\t\tTitle\t\t\tAuthor");
-        System.out.println("------------------------------------------------------------");
+        // System.out.println("------------------------------------------------------------");
+        // System.out.println("ISBN\t\tTitle\t\t\tAuthor");
+        // System.out.println("------------------------------------------------------------");
         for(Book book : bookArrayList) {
-            for(String s : book.categories) { // use getCategories()?
+            for(String s : book.getCategories()) {
                 if(s.equals(category)) {
                     list.add(book);
-                    System.out.println("["+(++count)+"] "+book.getISBN()+"\t"+book.getTitle()+"\t"+book.getAuthor());
+                    // System.out.println("["+(++count)+"] "+book.getISBN()+"\t"+book.getTitle()+"\t"+book.getAuthor());
                 }
                 break; // Probably not necessary
             }
         }
-        System.out.println("------------------------------------------------------------");
+        printBookList(list);
         return list;
     }
+    
+    // TODO: separate these into two methods pickBook and buyBook. Use with Options.cartOptions
     static Boolean pickingBook2Check(UserAccount userAcc , ArrayList<Book> arr) { // Don't put the loop here. Put it somewhere else.
         int tempInt;
         System.out.print("Choose a book to check (Enter 0 to go back): "); // method called after options are already printed
@@ -132,10 +136,11 @@ public class Main {
             System.out.println("-----------------------------------------------------");
             System.out.println("Not a number. Try again.");
             return true;
-        } catch (NoSuchElementException e2) {
+        } 
+        catch (NoSuchElementException e2) {
             e2.printStackTrace();
-            System.out.println("[Entering 1...]"); // TODO: band-aid
-            tempInt = 1;
+            System.out.println("[Entering 0...]");
+            tempInt = 0;
         }
         switch(tempInt) {
             case 0:
@@ -164,10 +169,11 @@ public class Main {
         System.out.println("Author: "+ book.getAuthor());
         System.out.println("ISBN: "+ book.getISBN());
         System.out.println("-----------------------------------");
-        System.out.print("Press Enter to continue");
+        System.out.println("Press Enter to continue");
         try {
             DaoFactory.getScanner().nextLine();
-        } catch (NoSuchElementException e) { // TODO" band-aid
+        } 
+        catch (NoSuchElementException e) {
             e.printStackTrace();
             System.out.println("[auto-advancing...]");
         }
@@ -177,10 +183,11 @@ public class Main {
             System.out.println("Purchase \""+ book.getTitle() +"\"? (y/n)");
             try {
                 purchaseStr = DaoFactory.getScanner().nextLine();
-            } catch (NoSuchElementException e) { // TODO: band-aid
+            } 
+            catch (NoSuchElementException e) {
                 e.printStackTrace();
-                System.out.println("[Automatically selecting 'y']");
-                purchaseStr = "y";
+                System.out.println("[Automatically selecting n]");
+                purchaseStr = "n";
             }
             switch (purchaseStr) {
                 case "y":
@@ -189,8 +196,8 @@ public class Main {
                     System.out.print("returning to book selection...");
                     try {
                         DaoFactory.getScanner().next();
-
-                    } catch (NoSuchElementException e) {
+                    } 
+                    catch (NoSuchElementException e) {
                     System.out.println("[Automatically advancing...]");
                     }
                     tempBool = false;
@@ -208,9 +215,6 @@ public class Main {
 
 
     }
-    static void checkingCart() {
-        // TODO:
-    }
     
     static void printReceipt(ArrayList<Book> cart) {
         System.out.println("Receipt:");;
@@ -224,7 +228,7 @@ class Book {
     private String isbn;
     private String title;
     private String author;
-    protected String[] categories;
+    private String[] categories;
     
     public Book(String isbn, String title, String author, String[] categories) {
         this.isbn = isbn;
@@ -241,5 +245,8 @@ class Book {
     }
     public String getAuthor() {
         return author;
+    }
+    public String[] getCategories() {
+        return categories;
     }
 }

@@ -73,21 +73,28 @@ public class Options {
                 System.out.println("Not a number. Try again.");
                 rememberMe = true;
                 continue;
-            } catch(NoSuchElementException e) { // TODO: band-aid
+            } 
+            catch(NoSuchElementException e) {
                 e.printStackTrace();
-                System.out.println("[automatically setting to 3...]");
-                temp1 = 3;
+                System.out.println("[automatically setting to 0...]");
+                temp1 = 0;
             }
             switch(temp1) {
                 case 0:
                     System.out.println("Logging out...");
+                    rememberMe = false;
                     break;
                 case 1:
-                    Main.printBookList(userAcc.getCart());
+                    cartOptions(userAcc.getCart());
                     rememberMe = true;
                     break;
                 case 2:
-                    Main.printBookList();
+                    Boolean temp4;
+                    do{
+                        temp4 = false;
+                        Main.printBookList();
+                        temp4 = Main.pickingBook2Check(userAcc, Main.bookArrayList);                        
+                    } while(temp4);
                     rememberMe = true;
                     break;
                 default:
@@ -153,6 +160,27 @@ public class Options {
                 registerLoop = true;
             }
         } while (registerLoop);
+    }
+    
+    static void cartOptions(ArrayList<Book> cart) {
+        boolean loop;
+        int tempInt;
+        do {
+            loop = false;
+            System.out.println("====================================");
+            System.out.println("Your Cart");
+            System.out.println("------------------------------------");
+            Main.printBookList(cart);
+            System.out.println("Select an item or press 0 to cancel");
+            try {
+                tempInt = DaoFactory.getScanner().nextInt();
+                loop = false;
+            } catch (InputMismatchException e) {
+                System.out.println("This put only accepts numbers. Try again.");
+                loop = true;
+            }
+        } while (loop);
+        // TODO: check other todo
     }
     
 }
