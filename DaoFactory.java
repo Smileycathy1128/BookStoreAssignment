@@ -18,6 +18,17 @@ public class DaoFactory { // creates, manages, and makes sure there is just one 
     static Scanner scan = null;
     
     private static Connection getConnection(){
+            // try {
+            //     ResourceBundle reBundle = ResourceBundle.getBundle(
+            //         "src/CathyNguyenProject0/dbConfig" // unused if commented out
+            //     ); // At this point,what's the point?
+            //     String dbString = reBundle.getString("DatabaseLocation");
+            //     connect = DriverManager.getConnection(dbString);
+            // } catch (SQLException sqlE) {
+            //     sqlE.printStackTrace();
+            // } catch (Exception e1) {
+            //     System.out.println("Check database config file");
+            //     e1.printStackTrace();
         if(connect == null) {
             try {
                 connect = DriverManager.getConnection(connectionString);
